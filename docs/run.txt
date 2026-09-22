@@ -1,0 +1,6 @@
+﻿lines: 2
+units: 4
+total: 549999
+exit=0
+Line 2: Quantity must be a positive integer, got: -2
+exit=1

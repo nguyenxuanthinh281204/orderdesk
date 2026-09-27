@@ -67,4 +67,16 @@ public class Order {
     public int hashCode() {
         return Objects.hash(id);
     }
+
+    public Money total() {
+        if (lines.isEmpty()) {
+            return Money.of("0", "VND");
+        }
+        String currency = lines.get(0).unitPrice().currency();
+        Money sum = Money.of("0", currency);
+        for (OrderLine line : lines) {
+            sum = sum.plus(line.lineTotal());
+        }
+        return sum;
+    }
 }

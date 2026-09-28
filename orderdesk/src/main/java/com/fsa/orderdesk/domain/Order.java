@@ -1,5 +1,6 @@
 package com.fsa.orderdesk.domain;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -7,27 +8,52 @@ import java.util.Objects;
 
 public class Order {
     private final String id;
+    private final String customerId;
+    private final Instant placedAt;
     private OrderStatus status;
     private final List<OrderLine> lines;
+    private String tag;
 
     public Order(String id) {
+        this(id, "CUST-DEFAULT", Instant.now());
+    }
+
+    public Order(String id, String customerId, Instant placedAt) {
         if (id == null || id.isBlank()) {
             throw new IllegalArgumentException("Order ID cannot be null or blank");
         }
         this.id = id;
+        this.customerId = Objects.requireNonNullElse(customerId, "CUST-DEFAULT");
+        this.placedAt = Objects.requireNonNullElse(placedAt, Instant.now());
         this.status = OrderStatus.PLACED;
         this.lines = new ArrayList<>();
+        this.tag = "INIT";
     }
 
     public String id() {
         return id;
     }
 
+    public String customerId() {
+        return customerId;
+    }
+
+    public Instant placedAt() {
+        return placedAt;
+    }
+
     public OrderStatus status() {
         return status;
     }
 
-    // Trả về Unmodifiable View để bảo vệ tính đóng gói
+    public String tag() {
+        return tag;
+    }
+
+    public void setTag(String tag) {
+        this.tag = tag;
+    }
+
     public List<OrderLine> lines() {
         return Collections.unmodifiableList(lines);
     }
@@ -53,19 +79,18 @@ public class Order {
         this.status = newStatus;
     }
 
-    // Định danh đơn hàng chỉ dựa trên ID
     @Override
     public boolean equals(Object o) {
         if (this == o)
             return true;
         if (!(o instanceof Order other))
             return false;
-        return Objects.equals(this.id, other.id);
+        return Objects.equals(this.id, other.id) && Objects.equals(this.tag, other.tag);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id);
+        return Objects.hash(id, tag);
     }
 
     public Money total() {

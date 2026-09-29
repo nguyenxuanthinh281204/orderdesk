@@ -5,7 +5,8 @@ public enum OrderStatus {
     PICKING("PICKING"),
     DISPATCHED("DISPATCHED"),
     DELIVERED("DELIVERED"),
-    CANCELLED("CANCELLED");
+    CANCELLED("CANCELLED"),
+    CONFIRMED("CONFIRM");
 
     private final String dbValue;
 

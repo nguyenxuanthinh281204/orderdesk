@@ -31,20 +31,7 @@ class OrderServiceTest {
                 new Product(activeSku, "Active Keyboard", Money.of("200000", "VND"), true),
                 new Product(inactiveSku, "Discontinued Mouse", Money.of("50000", "VND"), false));
 
-        repository = new OrderRepository() {
-            private final List<Order> storage = new ArrayList<>();
-
-            @Override
-            public void save(Order order) {
-                storage.add(order);
-            }
-
-            @Override
-            public Optional<Order> findById(String id) {
-                return storage.stream().filter(o -> o.id().equals(id)).findFirst();
-            }
-        };
-
+        repository = new InMemoryOrderRepository();
         service = new OrderService(catalog, repository);
     }
 
